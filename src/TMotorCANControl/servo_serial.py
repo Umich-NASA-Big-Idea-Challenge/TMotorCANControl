@@ -479,7 +479,7 @@ class motor_listener(serial.threaded.Protocol):
         Args:
             data: array of received data to parse
         """
-        # print(f"\n {len(data)}")
+        #print(f"\n {len(data)}")
         for d in data:
             if self.state == 0:
                 if d == 0x02:
@@ -512,7 +512,7 @@ class motor_listener(serial.threaded.Protocol):
             packet: array of data to parse.
         """
         if self.motor is not None:
-            # print(packet)
+            #print(packet)
             DL = packet[1]
             data = packet[2:2+DL]
             crc = buffer_get_int16(packet[2+DL:DL+4], 0)
@@ -528,7 +528,7 @@ class TMotorManager_servo_serial():
     used in the "context" of a with as block, in order to safely enter/exit
     control of the motor.
     """
-    def __init__(self, port = '/dev/ttyUSB0', baud=961200, motor_params=Servo_Params_Serial['AK80-9'], max_mosfett_temp = 50,):
+    def __init__(self, port = '/dev/ttyUSB0', baud=921600, motor_params=Servo_Params_Serial['AK80-9'], max_mosfett_temp = 50,):
         """
         Initialize the motor manager. Note that this will not turn on the motor, 
         until __enter__ is called (automatically called in a with block)
@@ -589,11 +589,11 @@ class TMotorManager_servo_serial():
 
             # tell the motor to send back all parameters
             # TODO expand to allow user to only request some data, could be faster
-            self.set_motor_parameter_return_format_all()
+            self.comm_set_motor_parameter_return_format_all()
             self.send_command()
 
             # tell motor to send current position (for some reason current position is not in the other parameters)
-            self.begin_position_feedback()
+            self.comm_begin_position_feedback()
             self.send_command()
 
             # don't do anything else
@@ -601,7 +601,7 @@ class TMotorManager_servo_serial():
             self.send_command()
 
             if not self.check_connection():
-                print("device: {self.device_info_string()} not connected!")
+                print(f"device: {self.device_info_string()} not connected!")
             else:
                 print(f"device: {self.device_info_string()} successfully connected.")
 
@@ -621,7 +621,7 @@ class TMotorManager_servo_serial():
         self._reader_thread.stop() 
 
         # power down motor
-        self._ser.write(self.set_duty_cycle(0.0)) 
+        self._ser.write(self.comm_set_duty_cycle(0.0)) 
 
         # end serial connection
         self._ser.close() 
@@ -635,9 +635,9 @@ class TMotorManager_servo_serial():
         For now, just sends some parameter read commands and waits 0.2 seconds to
         see if we got a response.
         """
-        self._send_specific_command(self.get_motor_parameters())
-        self._send_specific_command(self.get_motor_parameters())
-        self._send_specific_command(self.get_motor_parameters())
+        self._send_specific_command(self.comm_get_motor_parameters())
+        self._send_specific_command(self.comm_get_motor_parameters())
+        self._send_specific_command(self.comm_get_motor_parameters())
         # slight delay to ensure connection!
         time.sleep(0.2)
         return self._updated_async
@@ -774,7 +774,7 @@ class TMotorManager_servo_serial():
         self.send_command()
 
         # send the command to get parameters (message will be read in other thread)
-        self._send_specific_command(self.get_motor_parameters())
+        self._send_specific_command(self.comm_get_motor_parameters())
         
 
         # synchronize user-facing state with most recent async state
@@ -1018,7 +1018,10 @@ class TMotorManager_servo_serial():
         """
         header = COMM_PACKET_ID.COMM_GET_VALUES
         data = [header]
-        cmd = bytearray(create_packet(data))
+        packet = create_packet(data)
+        cmd = bytearray(packet)
+        
+        #print(f"CMD: {cmd}")
         if set_command:
             self._command = cmd
         return cmd

@@ -207,6 +207,7 @@ class CAN_Manager_servo(object):
         Makes a singleton object to manage a socketcan_native CAN bus.
         """
         if not cls._instance:
+            print("reached here")
             cls._instance = super(CAN_Manager_servo, cls).__new__(cls)
             print("Initializing CAN Manager")
             # verify the CAN bus is currently down
