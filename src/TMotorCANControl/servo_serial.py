@@ -479,7 +479,7 @@ class motor_listener(serial.threaded.Protocol):
         Args:
             data: array of received data to parse
         """
-        #print(f"\n {len(data)}")
+    
         for d in data:
             if self.state == 0:
                 if d == 0x02:
@@ -512,7 +512,6 @@ class motor_listener(serial.threaded.Protocol):
             packet: array of data to parse.
         """
         if self.motor is not None:
-            #print(packet)
             DL = packet[1]
             data = packet[2:2+DL]
             crc = buffer_get_int16(packet[2+DL:DL+4], 0)
@@ -1021,7 +1020,6 @@ class TMotorManager_servo_serial():
         packet = create_packet(data)
         cmd = bytearray(packet)
         
-        #print(f"CMD: {cmd}")
         if set_command:
             self._command = cmd
         return cmd
