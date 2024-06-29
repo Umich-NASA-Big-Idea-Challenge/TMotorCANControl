@@ -1,3 +1,5 @@
+# Example ROS2 Node that can switch between control modes via ros topics 
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32
@@ -15,7 +17,7 @@ CONTROL_MODES = {
 class MotorNode(Node):
     def __init__(self, device):
         super().__init__('motor_node')
-        
+
         self.device = device
         self.dev_name = "dev"
         self.mode = 10   
