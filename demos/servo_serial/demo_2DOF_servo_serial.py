@@ -1,5 +1,3 @@
-#from sys import path
-#path.append("/home/pi/TMotorCANControl/src/")
 from TMotorCANControl.servo_serial import *
 from NeuroLocoMiddleware.SoftRealtimeLoop import SoftRealtimeLoop
 

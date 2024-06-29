@@ -535,7 +535,7 @@ class TMotorManager_servo_serial():
 
         Args:
             port: the name of the serial port to connect to (ie, /dev/ttyUSB0, COM3, etc)
-            baud: the baud rate to use for connection. Should always be 961200 as far as I can tell.
+            baud: the baud rate to use for connection. Should always be 921600 as far as I can tell.
             motor_params: A parameter dictionary defining the motor parameters, as defined above.
             max_mosfett_temp: Temperature of the mosfett above which to throw an error, in Celsius
         """

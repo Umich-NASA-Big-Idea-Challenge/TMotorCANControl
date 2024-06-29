@@ -1,8 +1,7 @@
-#from sys import path
-#path.append("/home/pi/TMotorCANControl/src/")
 from TMotorCANControl.servo_serial import *
-import numpy as np
 from NeuroLocoMiddleware.SoftRealtimeLoop import SoftRealtimeLoop
+import numpy as np
+
 current = 0
 
 Pdes = 0
